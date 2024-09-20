@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="jquery.min.js"></script>
+
+    <style>
+      body,
+      html {
+        margin: 0;
+      }
+
+      body {
+        background-color: black;
+        color: white;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-family: monospace;
+      }
+
+      #fire {
+        display: none;
+        color: red;
+        font-size: 200px;
+      }
+      #time {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="play" onclick="play()">play</button>
+    <h1 id="fire">FIRE</h1>
+    <h2 id="time">hi</h2>
+
+    <script>
+      const SHOW_CLOCK = false;
+      const RANGE = [5, 20];
+
+      let time = null;
+      let done = false;
+      let interval;
+
+      function play() {
+        time = null;
+        done = false;
+
+        $("#play").hide();
+        $("#fire").hide();
+        $("#time").hide();
+
+        $(document.body).css("cursor", "none");
+
+        setTimeout(() => {
+          $("#fire").show();
+          time = new Date();
+
+          if (SHOW_CLOCK) {
+            $("#time").show();
+
+            interval = setInterval(
+              () =>
+                $("#time").text(
+                  `${(new Date() - time).toLocaleString("en-US", {
+                    minimumIntegerDigits: 3,
+                    useGrouping: false,
+                  })} ms`
+                ),
+              1
+            );
+          }
+        }, Math.floor(Math.random() * (RANGE[1] - RANGE[0]) + RANGE[0]) * 1000);
+      }
+
+      document.addEventListener("keydown", (e) => {
+        if (!!time && e.key == " " && !done) {
+          done = true;
+          if (interval) clearInterval(interval);
+          interval = undefined;
+          $("#time")
+            .show()
+            .text(`${new Date() - time} ms`);
+
+          if (SHOW_CLOCK) {
+            $("#time").css("color", "#22c55e");
+          }
+        }
+      });
+
+      $(document.body).click((e) => {
+        console.log(e.target.tagName);
+
+        if (e.target.tagName != "BUTTON") {
+          location.reload();
+        }
+      });
+    </script>
+  </body>
+</html>
