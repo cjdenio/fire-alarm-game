@@ -32,6 +32,15 @@
       #time {
         display: none;
       }
+      #play {
+        color: white;
+        background-color: red;
+        font-size: 50px;
+        text-transform: uppercase;
+        padding: 5px 10px;
+        border: none;
+        border-radius: 10px;
+      }
     </style>
   </head>
   <body>
@@ -40,16 +49,18 @@
     <h2 id="time">hi</h2>
 
     <script>
-      const SHOW_CLOCK = false;
+      const SHOW_CLOCK = true;
       const RANGE = [5, 20];
 
       let time = null;
       let done = false;
+      let playing = false;
       let interval;
 
       function play() {
         time = null;
         done = false;
+        playing = true;
 
         $("#play").hide();
         $("#fire").hide();
@@ -96,9 +107,12 @@
       $(document.body).click((e) => {
         console.log(e.target.tagName);
 
-        if (e.target.tagName != "BUTTON") {
-          location.reload();
+        if (e.target.tagName == "BUTTON") {
+          return;
         }
+
+        if (!playing) play();
+        else location.reload();
       });
     </script>
   </body>
